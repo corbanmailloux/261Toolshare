@@ -1,0 +1,97 @@
+<!--
+File:       project261/toolshare/templates/tools/reservation/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Tool Reservation Page
+-->
+
+{% extends 'base.html' %}
+
+{% block title %}Create a Tool Reservation{% endblock title %}
+
+{% block extrahead %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.datetimepicker.css"/>
+{% endblock extrahead %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Create a Tool Reservation</h1>
+</div>
+
+<p>Format for reservation: 12/31/2013 10:15 PM</p>
+
+
+<form role="form" action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+{% csrf_token %}
+    <table class="bootstrap-table">
+    {% for form in forms %}
+    {% for field in form %}
+        <tr>
+        {% if field.is_hidden %}
+            {{ field }}
+        {% else %}
+            <td class="col-left">{{ field.label_tag }}:</td>
+            <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">
+                {{ field }}
+                <div class="text-danger">{{ field.errors.0 }}</div>
+            </td>            
+        {% endif %}
+        </tr>
+    {% endfor %}
+    {% endfor %}
+    <tr><td class="col-left"><input class="btn btn-block btn-primary" type="submit" value="Create Reservation" /></td></tr>
+    </table>
+    
+</form>
+
+<br>
+<h2>Current and Future Reservations</h2>
+{% if future_reservations %}
+<table class="table table-hover table-striped table-bordered">
+    <tr>
+        <th>User</th>
+        <th>Start Date/Time</th>
+        <th>End Date/Time</th>
+    </tr>
+{% for reservation in future_reservations %}
+    <tr>
+        <td>{{ reservation.user }}</td>
+        <td>{{ reservation.start_date }}</td>
+        <td>{{ reservation.end_date }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No current or future reservations are available for this tool.</p>
+{% endif %}
+
+{% endblock content %}
+
+{% block script %}
+
+<!-- Thanks to http://xdsoft.net/jqplugins/datetimepicker/ for the datetimepicker -->
+<script language="javascript" type="text/javascript" src="{{ STATIC_URL }}js/jquery.datetimepicker.js"></script>
+<script>
+    $('#id_start_date').datetimepicker({
+        format: 'm/d/Y h:i A',
+        formatDate: 'm/d/Y',
+        formatTime: 'h:i A',
+        step: 15
+    });
+
+    $('#id_end_date').datetimepicker({
+        format: 'm/d/Y h:i A',
+        formatDate: 'm/d/Y',
+        formatTime: 'h:i A',
+        step: 15
+    });
+</script>
+
+{% endblock script %}

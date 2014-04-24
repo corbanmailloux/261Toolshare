@@ -1,0 +1,24 @@
+<!--
+File:       project261/toolshare/templates/registration/logout.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the logout page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}Logged Out{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>You are now logged out.</h1>
+</div>
+
+<p><a href="{% url 'login' %}">Login again? </a></p>
+
+{% endblock content %}

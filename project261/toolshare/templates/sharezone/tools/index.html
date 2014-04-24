@@ -1,0 +1,77 @@
+<!--
+File:       project261/toolshare/templates/sharezone/tools/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Sharezone tools page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}Tools In Your Sharezone{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>
+    {% if sharezone %}
+        Tools in {{sharezone.name}}
+    {% else %}
+        Sharezone Not Found
+    {% endif %}
+    </h1>
+</div>
+
+<!-- Make columns -->
+<div class="row">
+    <!-- Tool listing column -->
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3>Tools in {{ sharezone.name }}</h3>
+            </div>
+
+        {% for group in groups %}
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <a data-toggle="collapse" href="#{{ group.name|slugify }}">
+                        <h5><span class="glyphicon glyphicon-wrench"></span> {{ group.name }} ({{ group.size }})</h5>
+                    </a>
+                </div>
+
+                <!-- Collapse the group table -->
+                <div id="{{ group.name|slugify }}" class="collapse {% if group.size != 0 %} in {% endif %}">
+                    <!-- Table -->
+                    <table class="table table-hover table-striped table-bordered">
+                    {% if group.tools %}
+                        <tr>
+                            <th>Tool Name</th>
+                            <th width="20%" style="text-align: center;">Available?</th>
+                        </tr>
+                    {% endif %}
+                    {% for tool in group.tools %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'toolshare:tool_info' tool.id %}">{{ tool }}</a>
+                            </td>
+                            <td style="text-align: center;">
+                            {% if tool.can_be_borrowed %}
+                                <span class="text-success glyphicon glyphicon-ok"></span>
+                            {% else %}
+                                <span class="text-danger glyphicon glyphicon-remove"></span>
+                            {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+        </div><!-- /panel -->
+    </div><!-- /column -->
+
+{% endblock content %}

@@ -1,0 +1,52 @@
+<!--
+File:       project261/toolshare/templates/tools/edit/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Changing Tool Info Page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}Edit Tool Info{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Edit Tool Info</h1>
+</div>
+
+<p>
+    Please note: A quality of "Broken" will disable sharing for this tool.
+</p>
+
+<form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+    {% csrf_token %}
+    <table class="bootstrap-table">
+        {% for field in form %}
+            <tr>
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                {% if field.id_for_label == 'id_shared' %}
+                    {% if shared_available %}
+                        <td class="col-left">{{ field.label_tag }}:</td>
+                        <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">{{ field }}
+                        <div class="text-danger">{{ field.errors.0 }}</div></td>
+                    {% endif %}
+                {% else %}
+                    <td class="col-left">{{ field.label_tag }}:</td>
+                    <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">{{ field }}
+                    <div class="text-danger">{{ field.errors.0 }}</div></td>
+                {% endif %}
+            {% endif %}
+            </tr>
+        {% endfor %}
+    
+        <tr><td><input class="btn btn-sm btn-primary" type="submit" value="Submit Changes" /></td></tr>
+    </table>
+</form>
+{% endblock content %}

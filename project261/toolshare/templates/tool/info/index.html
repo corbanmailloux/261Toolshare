@@ -1,0 +1,140 @@
+<!--
+File:       project261/toolshare/templates/tools/info/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Tool Info Page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}{{ tool.name }} - Tool Info{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>{{ tool.name }}</h1>
+</div>
+
+{% if can_edit %}
+<p><a href="{% url 'toolshare:tool_edit' tool.id %}">Edit Tool</a></p>
+{% endif %}
+
+<h2>({{ tool.group }})</h2>
+<table>
+    <tr>
+        <td width="200px">Owner:</td>
+        <td width="380px">
+            <a href="{% url 'toolshare:user_profile' owner_id %}">{{ tool.owner }}</a>
+        </td>
+    </tr>
+    <tr>
+        <td width="200px">Quality:</td>
+        <td width="380px">{{ tool.quality_to_string }}</td>
+    </tr>
+    <tr>
+        <td width="200px">Description:</td>
+        <td width="380px">{{ tool.description }}</td>
+    </tr>
+    <tr>
+        <td width="200px">Special Instructions:</td>
+        <td width="380px">{{ tool.instructions }}</td>
+    </tr>
+    <tr>
+        <td width="200px">Available?:</td>
+        <td width="380px">
+        {% if tool.can_be_borrowed %}
+            <font color=green>Yes</font>
+        {% else %}
+            <font color=red>No</font>
+        {% endif %}
+        </td>
+    </tr>
+    {% if tool.shared and renter_id != None %}
+    <tr>
+        <td width="200px">Renter:</td>
+        <td width="380px"><a href="{% url 'toolshare:user_profile' renter_id %}">{{tool.renter}}</td>
+    </tr>
+    {% endif %}
+       
+    <tr>
+    {% if you_have_tool %}
+        <td>Return:</td>
+        <td>
+            <a class="btn btn-sm btn-primary" href="{% url 'toolshare:tool_return_quality' tool.id %}">Return Tool</a>
+        </td>
+    {% endif %}
+    <tr>
+    {% if tool.shared and tool.is_active %}
+        <td>Reserve:</td>
+        <td>
+            <a class="btn btn-sm btn-primary" href="{% url 'toolshare:tool_reserve' tool.id %}">Reserve Tool</a>
+        </td>
+    {% else %}
+        <td>Borrow:</td>
+        <td>
+            Sorry, the tool is currently unavailable
+        </td>
+    {% endif %}
+    </tr>
+    {% if can_force_return and not you_have_tool %} <!--You're a super/sharezone admin and can force return-->
+    <tr>
+        <td>Sharezone admin:</td>
+        <td>
+            <a class="btn btn-sm btn-warning" href="{% url 'toolshare:returnTool' tool.id %}">Force Return</a>
+        </td>
+    </tr>
+    {% endif %}
+    {% if can_edit %}
+    <tr>
+        <td>Remove:</td>
+        <td>
+            <a class="btn btn-sm btn-danger" data-toggle="modal" href="#removeTool">
+                Permanently Remove Tool
+            </a>
+            <!-- Remove Tool Modal -->
+            <div class="modal fade" id="removeTool" tabindex="-1" role="dialog" aria-labelledby="removeTool" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="removeTool">Remove {{ tool.name }}?</h4>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to permanently remove the tool: {{ tool.name }}?
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-danger" href="{% url 'toolshare:removeTool' tool.id %}">Remove {{ tool.name }}</a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </td>
+    </tr>
+    {% endif %}
+</table>
+<br>
+<h2>Current and Future Reservations</h2>
+{% if future_reservations %}
+<table class="table table-hover table-striped table-bordered">
+    <tr>
+        <th>User</th>
+        <th>Start Date/Time</th>
+        <th>End Date/Time</th>
+    </tr>
+{% for reservation in future_reservations %}
+    <tr>
+        <td>{{ reservation.user }}</td>
+        <td>{{ reservation.start_date }}</td>
+        <td>{{ reservation.end_date }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No current or future reservations are available for this tool.</p>
+{% endif %}
+{% endblock content %}

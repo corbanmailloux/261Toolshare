@@ -1,0 +1,62 @@
+<!--
+File:       project261/toolshare/templates/sharezone/edit/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Sharezone registration page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}Edit a Sharezone{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Edit Sharezone</h1>
+</div>
+
+    <form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+    {% csrf_token %}
+        <table class="bootstrap-table">
+        {% for field in forms.0 %}
+            <tr>
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                <td class="col-left">{{ field.label_tag }}:</td>
+                <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">
+                    {{ field }}
+                    <div class="text-danger">{{ field.errors.0 }}</div>
+                </td>
+                <td class="text-danger">{{ field.errors.0 }}</td>
+            {% endif %}
+            </tr>
+        {% endfor %}
+        <tr><td><br></td></tr>
+        <tr><td /><td><h4>Sharezone Address Information</h4></td></tr>
+        {% for field in forms.1 %}
+            <tr>
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                <td class="col-left">{{ field.label_tag }}:</td>
+                <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">
+                    {{ field }}
+                    <div class="text-danger">{{ field.errors.0 }}</div>
+                </td>
+                <td class="text-danger">{{ field.errors.0 }}</td>
+            {% endif %}
+            </tr>
+        {% endfor %}
+        
+        <tr><td class="col-left"><button class="btn btn-primary" type="submit">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Submit Changes
+        </button></td></tr>
+        </table>
+    </form>
+{% endblock content %}

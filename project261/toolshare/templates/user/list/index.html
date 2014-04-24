@@ -1,0 +1,42 @@
+<!--
+File:       project261/toolshare/templates/user/list/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the User List page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}Active Users{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+	<h1>Active Users</h1>
+</div>
+
+{% if userlist %}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3>Users:</h3>
+    </div>
+    <table class="table table-hover table-striped table-bordered">
+        {% for profile in userlist %}
+        <tr>
+            <td>
+                <a href="{% url 'toolshare:user_profile' profile.user.id %}">
+                    {{ profile.user.username }}
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div><!-- /panel -->
+{% else %}
+    <p>Sorry, there are no active users.</p>
+{% endif %}
+{% endblock content %}

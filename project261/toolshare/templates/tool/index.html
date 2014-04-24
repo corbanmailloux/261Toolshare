@@ -1,0 +1,60 @@
+<!--
+File:       project261/toolshare/templates/tools/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Tool List Page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}List of All Tools{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>List of All Tools</h1>
+</div>
+
+{% load staticfiles %}
+{% if group_list %}
+{% for group in group_list %}
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+            <h3>{{ group.name }} ({{ group.group_size }})</h3>
+        </div>
+        <!-- Table -->
+        <table class="table table-hover table-striped table-bordered">
+        {% if group.group_size != 0 %}
+            <tr>
+                <th>Tool Name</th>
+                <th>Available?</th>
+            </tr>
+        {% endif %}
+        {% for tool in group.get_all_tools %}
+            <tr>
+                <td>
+                    <a href="{% url 'toolshare:tool_info' tool.id %}">
+                        {{ tool }}
+                    </a>
+                </td>
+                <td style="text-align: center;">
+                {% if tool.can_be_borrowed %}
+                    <span class="text-success glyphicon glyphicon-ok"></span>
+                {% else %}
+                    <span class="text-danger glyphicon glyphicon-remove"></span>
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{% endfor %}
+{% else %}
+    <p>No tools are available.</p>
+{% endif %}
+{% endblock content %}

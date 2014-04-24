@@ -1,0 +1,51 @@
+<!--
+File:       project261/toolshare/templates/tools/register/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Tool Registration Page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}Register a Tool{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Register a Tool</h1>
+</div>
+
+<p>
+    Please note: A quality of "Broken" will disable sharing for this tool.
+</p>
+
+<form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+{% csrf_token %}
+    <table class="bootstrap-table">
+    {% for form in forms %}
+        {% for field in form %}
+            <tr>
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                <td class="col-left">{{ field.label_tag }}:</td>
+                <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">
+                {{ field }}
+                <div class="text-danger">{{ field.errors.0 }}</div>
+            {% endif %}
+            </tr>
+        {% endfor %}
+    {% endfor %}
+
+    <tr><td class="col-left"><button class="btn btn-block btn-primary" type="submit">
+        <span class="glyphicon glyphicon-wrench"></span>
+        Register Tool
+    </button>
+    </td></tr>
+    </table>
+</form>
+{% endblock content %}

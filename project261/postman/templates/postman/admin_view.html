@@ -1,0 +1,65 @@
+{% extends "postman/base.html" %}
+{% load url from future %}
+{% load i18n %}{% load postman_tags %}
+{% block content %}
+<div id="postman">
+	<div class="page-header">
+		<h1>Message</h1>
+	</div>
+	<form action="" method="post">{% csrf_token %}
+		{% for message in pm_messages %}
+		<input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} />
+		{% endfor %}
+		<span id="pm_buttons">
+			<a class="btn btn-info btn-sm" href="{{ next_url }}">
+				<span class="glyphicon glyphicon-arrow-left"></span>
+				{% trans "Back" %}
+			</a>
+			<button class="btn btn-danger btn-sm" type="submit" onclick="this.form.action='{% if not pm_messages.0.is_deleted %}{% url 'postman_admin_delete' %}?next={{ next_url|urlencode }}'">
+				<span class="glyphicon glyphicon-trash"></span> {% trans "Delete" %} {% else %} {% url 'postman_admin_undelete' %}?next={{ next_url|urlencode }}'">
+				<span class="glyphicon glyphicon-arrow-up"></span> {% trans "Undelete" %} {% endif %}
+			</button>
+			{% if not archived %}
+			<button class="btn btn-info btn-sm" type="submit" onclick="this.form.action='{% url 'postman_admin_archive' %}?next={{ next_url|urlencode }}'">
+				<span class="glyphicon glyphicon-book"></span>
+				{% trans "Archive" %}
+			</button>
+			{% endif %}
+		</span>
+	</form>
+	{% for message in pm_messages %}
+	<div class="pm_message{% if message.is_pending %} pm_pending{% endif %}{% if message.is_rejected %} pm_rejected{% endif %}{% if message.sender == user and message.sender_archived or message.recipient == user and message.recipient_archived %} pm_archived{% endif %}{% if message.sender == user and message.sender_deleted_at or message.recipient == user and message.recipient_deleted_at %} pm_deleted{% endif %}{% if message.recipient == user and not message.read_at %} pm_unread{% endif %}">
+		<table class="table table-striped table-hover table-bordered">
+			<tr>
+				<td width=10%><strong>Sender</strong></td>
+				<td width=90%>{{ message.obfuscated_sender|or_me:user }}</td>
+			</tr>
+			<tr>
+				<td width=10%><strong>Recipient</strong></td>
+				<td width=90%>{{ message.obfuscated_recipient|or_me:user }}</td>
+			</tr>
+			<tr>
+				<td width=10%><strong>Date</strong></td>
+				<td width=90%>{{ message.sent_at|date:"DATETIME_FORMAT"}}</td>
+			</tr>
+			<tr>
+				<td width=10%><strong>Subject</strong></td>
+				<td width=90%>{{ message.subject }}</td>
+			</tr>
+			{% if message.is_rejected %}
+			<tr>
+				<td width=10%><strong>Rejected</strong></td>
+				<td width=90%>
+					{% if message.moderation_reason %}{{ message.moderation_reason }}{% endif %}
+				</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<td width=10%><strong>Body</strong></td>
+				<td width=90%>{{ message.body|linebreaksbr }}</td>
+			</tr>
+		</table>
+	{% endfor %}
+	</div>
+</div>
+{% endblock %}

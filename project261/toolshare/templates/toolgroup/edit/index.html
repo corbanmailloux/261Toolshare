@@ -1,0 +1,38 @@
+<!--
+File:       project261/toolshare/templates/toolgroup/edit/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Edit ToolGroup page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}Edit a ToolGroup{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Edit a ToolGroup</h1>
+</div>
+<form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+{% csrf_token %}
+    <div class="form-group">
+    	<table class="bootstrap-table">
+    		<tr>
+    			<td class="entry {% if forms.0.errors %}entry-error{% endif %}">
+			        {{ forms.0.name }}
+			    </td><td> &nbsp;&nbsp;&nbsp;<input class="btn btn-sm btn-primary" type="submit" value="Save Changes" />
+			        <a class="btn btn-sm btn-primary" href="{% url 'toolshare:toolgroup' %}">Cancel</a>
+				</td>
+			</tr>
+			<tr>
+				<td class="text-danger">{{ forms.0.name.errors.0 }}</td>
+			</tr>
+		</table>
+    </div>
+</form>
+{% endblock content %}

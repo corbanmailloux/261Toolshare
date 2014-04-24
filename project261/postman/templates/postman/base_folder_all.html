@@ -1,0 +1,143 @@
+{% extends "postman/base.html" %}
+{% load url from future %}
+{% load i18n postman_tags %}{% load pagination_tags %}{% comment %}
+WARNING: 'pagination_tags' is a name from the django-pagination application.
+For convenience, the design of this template is done with the use of that application.
+Django-postman will still be working, even if that application is not installed, by providing a mock
+for the template tag library.
+If the real implementation is to be used, just make sure that 'pagination' is declared before 'postman'
+in the INSTALLED_APPS setting.
+{% endcomment %}
+{% block content %}
+<div id="postman">
+
+{% autopaginate pm_messages %}
+{% if invalid_page %}
+<p>{% trans "Sorry, this page number is invalid." %}</p>
+{% else %}
+{% if pm_messages %}
+{% block pm_by_modes %}{% endblock pm_by_modes %}
+<div class="row">
+  <div class="panel panel-primary">
+    <div class="panel panel-heading">
+      <h1>{% block pm_folder_title %}{% endblock %}</h1>
+    </div>
+    <form action="{% block pm_form_action %}{% endblock %}" method="post">{% csrf_token %}
+    {% block pm_form_buttons %}
+      <span id="pm_buttons">
+      {% block pm_delete_button %}
+        <button class="btn btn-danger btn-sm"type="submit" onclick="this.form.action='{% url 'postman_admin_delete' %}'">
+          <span class="glyphicon glyphicon-trash"></span>
+          {% trans "Delete Checked" %}
+        </button>
+      {% endblock %}
+    {% block pm_archive_button %}
+      <button class="btn btn-info btn-sm" type="submit" onclick="this.form.action='{% url 'postman_admin_archive' %}'">
+        <span class="glyphicon glyphicon-book"></span>
+        {% trans "Archive Checked" %}
+      </button>
+    {% endblock %}
+    {% block pm_undelete_button %}
+      <button class="btn btn-warning btn-sm" type="submit" onclick="this.form.action='{% url 'postman_admin_undelete' %}'">
+        <span class="glyphicon glyphicon-arrow-up"></span>
+        {% trans "Undelete Checked " %}
+      </button>
+    {% endblock %}
+    </span>
+    {% endblock %}
+    <table class="table table-hover table-striped table-bordered">
+      <th colspan=5><h3>Inbox</h3></th>
+      <tr>
+        <th width=10%>Action</th>
+        <th width=10%>Sender</th>
+        <th width=10%>Recipient</th>
+        <th width=60%>Body</th>
+        <th width=10%>Received</th>
+      </tr>
+      {% for message in pm_messages %}
+      {% if not message.recipient_archived %}
+      {% if not message.is_deleted %}
+      <tr>
+       <td>
+        <input type="checkbox" name="pks" value="{{ message.pk }}" /></td>
+        <td>{{ message.obfuscated_sender|or_me:user }}</td>
+        <td>{{ message.obfuscated_recipient|or_me:user }}</td>
+       <td>{% if message.is_new %}<strong>{% endif %}{% if message.is_replied %}<em>{% endif %}
+        <a href="{{message.get_admin_url }}?next={{ current_url|urlencode }}">
+        {% include "postman/inc_subject_ex.html" %}
+        </a>
+       {% if message.is_replied %}</em>{% endif %}{% if message.is_new %}</strong>{% endif %}</td>
+       <td>{{ message.sent_at|compact_date:_("g:i A,M j,n/j/y") }}</td>
+       {% endif %}
+       {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+
+    <table class="table table-hover table-striped table-bordered">
+    <th colspan=5><h3>Archived</h3></th> 
+      <tr>
+        <th width=10%>Action</th>
+        <th width=10%>Sender</th>
+        <th width=10%>Recipient</th>
+        <th width=60%>Body</th>
+        <th width=10%>Received</th>
+      </tr>
+      {% for message in pm_messages %}
+      {% if message.recipient_archived %}
+      {% if not message.is_deleted %}
+      <tr>
+       <td>
+        <input type="checkbox" name="pks" value="{{ message.pk }}" /></td>
+        <td>{{ message.obfuscated_sender|or_me:user }}</td>
+        <td>{{ message.obfuscated_recipient|or_me:user }}</td>
+       <td>{% if message.is_new %}<strong>{% endif %}{% if message.is_replied %}<em>{% endif %}
+        <a href="{{message.get_admin_url }}?next={{ current_url|urlencode }}">
+        {% include "postman/inc_subject_ex.html" %}
+        </a>
+       {% if message.is_replied %}</em>{% endif %}{% if message.is_new %}</strong>{% endif %}</td>
+       <td>{{ message.sent_at|compact_date:_("g:i A,M j,n/j/y") }}</td>
+       {% endif %}
+       {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+
+    <table class="table table-hover table-striped table-bordered">
+    <th colspan=5><h3>Deleted</h3></th>
+      <tr>
+        <th width=10%>Action</th>
+        <th width=10%>Sender</th>
+        <th width=10%>Recipient</th>
+        <th width=60%>Body</th>
+        <th width=10%>Received</th>
+      </tr>
+  {% for message in pm_messages %}
+  {% if message.is_deleted %}
+  <tr>
+   <td>
+    <input type="checkbox" name="pks" value="{{ message.pk }}" /></td>
+    <td>{{ message.obfuscated_sender|or_me:user }}</td>
+    <td>{{ message.obfuscated_recipient|or_me:user }}</td>
+   <td>{% if message.is_new %}<strong>{% endif %}{% if message.is_replied %}<em>{% endif %}
+    <a href="{{message.get_admin_url }}?next={{ current_url|urlencode }}">
+    {% include "postman/inc_subject_ex.html" %}
+    </a>
+   {% if message.is_replied %}</em>{% endif %}{% if message.is_new %}</strong>{% endif %}</td>
+   <td>{{ message.sent_at|compact_date:_("g:i A,M j,n/j/y") }}</td>
+   {% endif %}
+  </tr>
+  {% endfor %}
+  </table>
+  </div>
+</div>
+  
+</form>
+{% paginate %}
+{% else %}
+<p>{% trans "No messages." %}</p>
+{% endif %}
+{% endif %}
+{% block pm_footer_info %}{% endblock %}
+</div>
+{% endblock content %}

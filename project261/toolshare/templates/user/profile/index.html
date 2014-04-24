@@ -1,0 +1,113 @@
+<!--
+File:       project261/toolshare/templates/user/profile/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the User Profile page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}{{ profile.user.username }} - User Info{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>
+    {% if profile.user.is_superuser %}
+        <span class="glyphicon glyphicon-star" title="System Administrator"></span> 
+    {% elif profile.is_sharezone_admin %}
+        <span class="glyphicon glyphicon-star-empty" title="Sharezone Admin"></span> 
+    {% else %}
+        <span class="glyphicon glyphicon-user" title="User"></span> 
+    {% endif %}
+    {{ profile.user.username }} 
+    {% if profile.user.is_active == False %}
+        (User is inactive) 
+    {%endif%}
+    </h1>
+</div>
+
+<div class="btn-group">
+    {% if profile.user == request.user %}
+    <a class="btn btn-sm btn-primary" href="{% url 'toolshare:user_profile_edit' %}">
+        <span class="glyphicon glyphicon-pencil"></span> Edit Profile
+    </a>
+    <a class="btn btn-sm btn-danger" href="{% url 'password_change' %}">
+        <span class="glyphicon glyphicon-asterisk"></span> Change Password
+    </a>
+    {% else %}
+    <a class="btn btn-sm btn-primary" href="{% url 'postman_write' profile.user.username %}">
+        <span class="glyphicon glyphicon-send"></span> Message This User
+    </a>
+    {% endif %}
+</div>
+
+
+<table class="table table-hover table-striped table-bordered">
+    {% if profile.user.first_name != "" or profile.user.last_name != "" %}
+    <tr>
+        <td>First and Last Name:</td>
+        <td>{{profile.user.first_name}} {{profile.user.last_name}}</td>
+    </tr>
+    {% endif %}
+    
+    {% if profile.user.email != "" %}
+    <tr>
+        <td>Email:</td>
+        <td>{{profile.user.email}}</td>
+    </tr>
+    {% endif %}
+    
+    <tr>
+        <td>Date Joined:</td>
+        <td>{{ profile.user.date_joined }}</td>
+    </tr>
+    
+    <tr>
+        <td>Last Login:</td>
+        <td>{{ profile.user.last_login }}</td>
+    </tr>
+    
+    <tr>
+        <td>Address:</td>
+        <td>{{profile.address}}</td>
+    </tr>
+
+    {% if profile.sharezone %}
+    <tr>
+        <td>Sharezone:</td>
+        <td>{{profile.sharezone.name}}</td>
+    </tr>
+    {% endif %}
+    
+    {% if ownedTools %}
+    <tr>
+        <td>Tools You Own:</td>
+        <td>
+            <ul>
+            {% for tool in ownedTools %}
+                <li><a href="{% url 'toolshare:tool_info' tool.id %}">{{ tool }}</a></li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if rentedTools %}
+    <tr>
+        <td>Tools You Are Currently Renting:</td>
+        <td>
+            <ul>
+            {% for tool in rentedTools %}
+                <li><a href="{% url 'toolshare:tool_info' tool.id %}">{{ tool }}</a></li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    {% endif %}
+</table>   
+{% endblock content %}

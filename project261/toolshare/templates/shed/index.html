@@ -1,0 +1,55 @@
+<!--
+File:       project261/toolshare/templates/sharezone/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Sharezone/Sharezone page.
+-->
+
+<!-- THIS PAGE IS NO LONGER USED. -->
+
+{% extends 'base.html' %}
+{% block title %}Tools in Sharezone {{ sharezone.address.zip }}{% endblock title %}
+{% block content %}
+<h1>Tools in Sharezone {{ sharezone.address.zip }}</h1>
+{% load staticfiles %}
+{% if not auth %}
+    <p>Please <a href="{% url 'login' %}">log in</a> to view your sharezone's information.</p>
+{% else %}
+{% if groups %}
+    <table>
+        <tr>
+            <td><h2>Tool Name<h2></td>
+            <td><h2>Available?<h2></td>
+        </tr>
+    {% for group in groups %}
+        <tr>
+            <td><h3>{{ group.name }}</h3></td>
+        </tr>
+    {% for tool in group.tools %}
+        <tr style="background-color: {{ alternator.alternate }};">
+            <td>
+                <a href="{% url 'toolshare:tool_info' tool.id %}">{{ tool }}</a>
+            </td>
+            <td style="text-align: center;">
+            {% if tool.can_be_borrowed %}
+                <span class="text-success glyphicon glyphicon-ok"></span>
+            {% else %}
+                <span class="text-danger glyphicon glyphicon-remove"></span>
+            {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    {% endfor %}
+    
+    </table>
+{% else %}
+    <p>No tools are available :(</p>
+{% endif %}
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,155 @@
+<!--
+File:       project261/toolshare/templates/sharezone/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the Sharezone page.
+-->
+
+{% extends 'base.html' %}
+{% block title %}Sharezone Info{% endblock title %}
+{% block content %}
+
+<div class="page-header">
+    <h1>
+    {% if sharezone %}
+        Sharezone: {{sharezone.name}}
+    {% else %}
+        Sharezone Not Found
+    {% endif %}
+    </h1>
+</div>
+
+{% if request.user.profile.is_sharezone_admin or request.user.profile.user.is_superuser %}
+<a class="btn btn-danger btn-sm" href="{% url 'toolshare:sharezone_edit' %}">
+    <span class="glyphicon glyphicon-pencil"></span> Edit Sharezone
+</a>
+{% endif %}
+
+
+<!-- Make columns -->
+<div class="row">
+    <!-- Tool listing column -->
+    <div class="col-md-10">
+        <div class="panel panel-info">
+        <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3>Sharezone Statistics</h3>
+            </div>
+
+            <!-- Table -->
+            <table class="table table-hover table-striped table-bordered">
+                <tr>
+                    <td>Population:</td>
+                    <td colspan="2">{{ number_of_users }}</td>
+                </tr>
+                <tr>
+                    <td>Number of Shares:</td>
+                    <td colspan="2">{{ number_of_shares }}</td>
+                </tr>
+                <tr>
+                    <td>Most Used Tool:</td>
+                    <td>
+                    {% if most_used_tool.0 == None %}
+                        {{ most_used_tool.0 }}
+                    {% else %}
+                        <a href="{% url 'toolshare:tool_info' most_used_tool.0.id %}">
+                            {{ most_used_tool.0 }}
+                        </a>
+                    {% endif %}
+                    </td>
+                    <td>{{ most_used_tool.1 }} exchange{% if most_used_tool.1 != 1 %}s{% endif %}</td>
+                </tr>
+                <tr>
+                    <td>Most Recently Used Tool:</td>
+                    {% if most_recent_tool == None %}
+                    <td>
+                        N/A
+                    </td>
+                    <td>
+                        Returned: N/A
+                    </td>
+                    {% else %}
+                    <td>
+                        <a href="{% url 'toolshare:tool_info' most_recent_tool.0.id %}">
+                            {{ most_recent_tool.0 }}
+                        </a>
+                    </td>
+                    <td>
+                        Returned: {{ most_recent_tool.1 }}
+                    </td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>Most Active Borrower:</td>
+                    <td>
+                    {% if most_active_borrower.0 == None %}
+                        {{ most_active_borrower.0 }}
+                    {% else %}
+                        <a href="{% url 'toolshare:user_profile' most_active_borrower.0.id %}">
+                            {{ most_active_borrower.0 }}
+                        </a>
+                    {% endif %}
+                    </td>
+                    <td>{{ most_active_borrower.1 }} exchange{% if most_active_borrower.1 != 1 %}s{% endif %}</td>
+                </tr>
+                <tr>
+                    <td>Most Active Lender:</td>
+                    <td>
+                    {% if most_active_lender.0 == None %}
+                        {{ most_active_lender.0 }}
+                    {% else %}
+                        <a href="{% url 'toolshare:user_profile' most_active_lender.0.id %}">
+                            {{ most_active_lender.0 }}
+                        </a>
+                    {% endif %}
+                    </td>
+                    <td>{{ most_active_lender.1 }} exchange{% if most_active_lender.1 != 1 %}s{% endif %}</td>
+                </tr>
+            </table>
+        </div>
+    </div><!-- /column -->
+
+    <!-- User listing column -->
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3>Members</h3>
+            </div>
+            <table class="table table-hover table-striped table-bordered">
+                <tr>
+                    <th>Administrators:</th>
+                </tr>
+                {% for admin in admins %}
+                <tr>
+                    <td>
+                        <b><a href="{% url 'toolshare:user_profile' admin.id %}">
+                            {{ admin.username }}
+                        </a></b>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th>Users:</th>
+                </tr>
+                {% for user in users %}
+                <tr>
+                    <td>
+                        <a href="{% url 'toolshare:user_profile' user.id %}">
+                            {{ user.username }}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div><!-- /panel -->
+    </div><!-- /column -->
+</div><!-- /rows -->
+
+
+{% endblock content %}

@@ -1,0 +1,73 @@
+<!--
+File:       project261/toolshare/templates/registration/login.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the login page.
+-->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Login</h1>
+</div>
+
+
+{% if form.non_field_errors %}
+<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>Oh snap!</strong> {{ form.non_field_errors.0 }}
+</div>
+{% endif %}
+
+<form class="form-signin" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+{% csrf_token %}
+    
+{% if form.username.errors %}
+    <div class="form-group has-error">
+{% else %}
+    <div class="form-group">
+{% endif %}
+        <input name="{{ form.username.html_name }}" 
+        {% if form.username.value != None %}
+            value="{{ form.username.value }}"
+        {% endif %}
+            type="text" class="form-control" placeholder="Username" autofocus>
+        <span class="help-block">{{ form.username.errors.0 }}</span>
+    </div>
+
+{% if form.password.errors %}
+    <div class="form-group has-error">
+{% else %}
+    <div class="form-group">
+{% endif %}
+        <input name="{{ form.password.html_name }}" type="password" class="form-control" placeholder="Password">
+        <span class="help-block">{{ form.password.errors.0 }}</span>
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+
+</form>
+<div class="row">
+    <div class="col-md-4">
+        <a class="btn btn-default btn-lg btn-block" href="{% url 'register' %}">Register Now</a>
+    </div>
+    <div class="col-md-4">
+        <a class="btn btn-default btn-lg btn-block" href="{% url 'toolshare:sharezone_create' %}">Create a New Sharezone</a>
+    </div>
+    <div class="col-md-4">
+        <a class="btn btn-default btn-lg btn-block" href="{% url 'password_reset' %}">Forgot your password?</a>
+    </div>
+</div>
+
+
+
+{% endblock %}

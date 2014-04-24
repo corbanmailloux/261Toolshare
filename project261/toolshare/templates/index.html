@@ -1,0 +1,95 @@
+<!--
+File:       project261/toolshare/templates/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the home page for Toolshare.
+-->
+
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>Welcome to Toolshare!</h1>
+            <p>
+            {% if request.user.is_authenticated %}
+                Welcome back, <b>{{ request.user.first_name }}</b>. Please enjoy your tool-sharing experience!
+                
+            {% else %}
+                Toolshare is a website that allows you to create communities for the sharing of tools. Get started now by registering an <a href="{% url 'register' %}">account</a> or a <a href="{% url 'toolshare:sharezone_create' %}">sharezone.</a>
+            {% endif %}
+            </p>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <h2>Basic Statistics:</h2>
+    
+        <table class="table table-hover table-bordered">
+
+            <tr>
+                <td>Number of Sharezones:</td><td>{{sharezone_count}}</td>
+            </tr>
+            <tr>
+                <td>Number of Users:</td><td>{{user_count}}</td>
+            </tr>
+            <tr>
+                <td>Number of Tools:</td><td>{{tool_count}}</td>
+            </tr>   
+            <tr>
+                <td>Number of Rentals:</td><td>{{rental_count}}</td>
+            </tr>
+            <tr>
+                <td>Most Popular ToolGroup:</td><td>{{most_popular_group}}</td>
+            </tr>   
+        </table>
+    </div>
+
+<!-- Only display Most Popular if logged in. -->
+{% if request.user.is_authenticated %}
+    <div class="col-md-4">
+        <h2>Most Popular Sharezones:</h2>
+
+        <table class="table table-hover table-bordered">
+        {% for sharezone in most_popular_sharezones %}
+            {% if sharezone.0 != None %}
+                <tr>
+                    <td>{{sharezone.0.name}}</td>
+                    <td>Population: {{sharezone.1}}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+    </div>
+{% endif %}
+
+    <div class="col-md-4">
+
+        <h2>Average Tool Quality:</h2>
+
+        <table class="table table-hover table-bordered">
+        {% for group in groups %}
+            <tr>
+                <td>{{group}}:</td>
+                <td>
+                    {% if group.get_average_tool_quality == None %}
+                        -
+                    {% else %}
+                        {{group.get_average_tool_quality}}/5.0
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div><!-- /row -->
+
+{% endblock content %}

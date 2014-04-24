@@ -1,0 +1,126 @@
+/*
+File:       toolshare/static/css/additional_css.css
+Language:   CSS
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+Additional CSS for the website.
+*/
+
+
+/* FOOTER */
+/* Sticky footer styles */
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -83px;
+  /* Pad bottom by footer height */
+  padding: 0 0 83px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 83px;
+  /*background-color: #f5f5f5;*/
+}
+
+.container .credit {
+  margin: 20px 0;
+}
+
+
+/* NAVBAR */
+/* Remove top rounded corners of the navbar */
+.navbar {
+  border-radius: 0px 0px 4px 4px !important;
+}
+
+
+.right {
+  float: right;
+}
+
+.bootstrap-table {
+  max-width: 1024px;
+  width: 100%;
+}
+
+.bootstrap-table tr td {
+  padding: 5px;
+}
+
+.bootstrap-table .col-right{
+  width: 80%;
+}
+
+.bootstrap-table .col-left{
+  text-align: right;
+}
+
+
+.bootstrap-table .col-left {
+  vertical-align: middle;
+}
+
+.entry textarea, .entry input, .entry select {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #555555;
+  vertical-align: middle;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+          transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+.entry textarea {
+  height: auto;
+}
+
+.entry textarea:focus, .entry input:focus, .entry select:focus{
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.entry-error input, .entry-error select, .entry-error textarea{
+  border-color: red;
+  border-width: 2px;
+}
+
+
+.entry input:focus, .bootstrap-table textarea {
+  border-radius: 5px;
+  color: black;
+}
+
+.entry input[type="checkbox"] {
+  box-shadow: none;
+  width: 20px;
+  
+}
+.dropdown-menu .glyphicon {
+  margin-right: 5px;
+}

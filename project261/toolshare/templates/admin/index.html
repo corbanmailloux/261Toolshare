@@ -1,0 +1,254 @@
+<!--
+File:       project261/toolshare/templates/admin/index.html
+Language:   Modified HTML
+
+Author:     Val Booth <vxb4825@rit.edu>
+Author:     Corban Mailloux <cdm3806@rit.edu>
+Author:     Adam McCarthy <aem1269@rit.edu>
+Author:     Michael Washburn <mdw7326@rit.edu>
+Author:     Bryon Wilkins <brw4824@rit.edu>
+
+The template for the admin page.
+-->
+{% extends 'base.html' %}
+{% block title %}Admin Page{% endblock title %}
+{% block content %}
+{% load staticfiles %}
+
+<div class="page-header">
+    <h1>Admin Page</h1>
+</div>
+
+
+{% if request.user.is_superuser %}
+<p>
+    Welcome System Admin! On this page you can manage users by editing their profile information, banning or approving them by clicking the appropriate buttons.
+    You can also manage Sharezones by approving them or editing their information by clicking the buttons in the bottom table.
+    Additionally you can add or edit ToolGroups in the system by clicking the button below, or view all messages throughout all of the Sharezones
+    by selecting "View All Messages" in the Messaging drowdown in the navigator bar at the top of the page. Thank you for your service, System Admin! 
+    <font color="white"> Have fun and don't let the infinite power of the universe go to your head. </font>
+</p>
+
+{% else %}
+<p>
+    Welcome Admin! As a Sharezone Admin you
+    can manage users by editing their profile information, banning or approving them by clicking the appropriate buttons. 
+    Additionally you are able to view all messages within your Sharezone by clicking the "View All Messages" option in the Messaging
+    dropdown in the navigator bar at the top of the page. Thank you for administrating this Sharezone and have fun!
+</p>
+{% endif %}
+
+{% if request.user.is_superuser %}
+    <a class="btn btn-sm btn-info" href="{% url 'toolshare:toolgroup' %}">
+        <span class="glyphicon glyphicon-list"></span> View and Create ToolGroups
+    </a>
+{% endif %}
+
+<div class="panel panel-primary">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <h2>Users</h2>
+    </div>
+    <!-- Table -->
+    <table class="table table-hover table-striped table-bordered">
+        <tr>
+            <th>User</th>
+            <th>Superuser</th>
+            <th>Sharezone Admin</th>
+            <th>Sharezone</th>
+            <th>Active</th>
+            <th>Approved</th>
+            <th>Ban</th>
+            <th>Make Sharezone Admin</th>
+            <th>Edit User</th>
+        </tr>
+    {% for profile in user_profiles %}
+        <tr>
+            <td>
+            {% if profile.user.id == request.user.id %}<b>{% endif %}
+                <a href="{% url 'toolshare:user_profile' profile.user.id %}">
+                {{profile.user}}</a>
+            {% if profile.user.id == request.user.id %}</b>{% endif %}
+            </td>
+            <td>
+            {% if profile.user.is_superuser %}
+                <span class="text-success glyphicon glyphicon-ok"></span>
+            {% else %}
+                <span class="text-danger glyphicon glyphicon-remove"></span>
+            {% endif %}
+            </td>
+            <td>
+            {% if profile.is_sharezone_admin %}
+                <span class="text-success glyphicon glyphicon-ok"></span>
+            {% else %}
+                <span class="text-danger glyphicon glyphicon-remove"></span>
+            {% endif %}
+            </td>
+            <td>{{profile.sharezone}}</td>
+            <td>
+            {% if profile.user.is_active %}
+                <span class="text-success glyphicon glyphicon-ok"></span>
+            {% else %}
+                <span class="text-danger glyphicon glyphicon-remove"></span>
+            {% endif %}
+            </td>
+            <td>
+            {% if profile.is_approved %}
+                <span class="text-success glyphicon glyphicon-ok"></span>
+            {% else %}
+                <a href="{% url 'toolshare:approve_user' profile.user.id %}" class="btn btn-sm btn-block btn-success">
+                    <span class="glyphicon glyphicon-ok"></span> Approve
+                </a>
+            {% endif %}
+            </td>
+            <td>
+            {% if profile.user.id == request.user.id %}
+                <a class="btn btn-default btn-sm btn-block" disabled="disabled">Yourself</a>
+            {% else %}
+            {% if profile.user.is_active %}
+                <a class="btn btn-danger btn-sm btn-block" data-toggle="modal" href="#banUser{{ profile.user.id}}">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Ban
+                </a>
+                <!-- Ban Modal -->
+                <div class="modal fade" id="banUser{{ profile.user.id}}" tabindex="-1" role="dialog" aria-labelledby="banUserbanUser{{ profile.user.id}}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="banUser{{ profile.user.id}}">Ban {{ profile.user }}?</h4>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to ban {{ profile.user }}?
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-danger" href="{% url 'toolshare:ban_user' profile.user.id %}">Ban {{ profile.user }}</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            {% else %}
+                <a class="btn btn-warning btn-sm btn-block" data-toggle="modal" href="#unbanUser{{ profile.user.id}}">
+                    Unban
+                </a>
+                <!-- Unban Modal -->
+                <div class="modal fade" id="unbanUser{{ profile.user.id}}" tabindex="-1" role="dialog" aria-labelledby="unbanUserbanUser{{ profile.user.id}}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="unbanUser{{ profile.user.id}}">Unban {{ profile.user }}?</h4>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to unban {{ profile.user }}?
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-warning" href="{% url 'toolshare:unban_user' profile.user.id %}">Unban {{ profile.user }}</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            {% endif %}
+            {% endif %}
+            </td>
+            <td>
+            {% if profile.is_sharezone_admin %}
+                <a class="btn btn-warning btn-sm btn-block" data-toggle="modal" href="#removeSharezoneAdmin{{ profile.user.id}}">
+                    <span class="glyphicon glyphicon-user"></span> Remove Sharezone Admin
+                </a>
+                <!-- Remove Sharezone Admin Modal -->
+                <div class="modal fade" id="removeSharezoneAdmin{{ profile.user.id}}" tabindex="-1" role="dialog" aria-labelledby="removeSharezoneAdmin{{ profile.user.id}}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="removeSharezoneAdmin{{ profile.user.id}}">Demote {{ profile.user }}?</h4>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to demote {{ profile.user }} from Sharezone admin?
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-warning" href="{% url 'toolshare:remove_sharezone_admin' profile.user.id %}">
+                                    Demote {{ profile.user }}</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            {% else %}
+                <a class="btn btn-danger btn-sm btn-block" data-toggle="modal" href="#makeSharezoneAdmin{{ profile.user.id}}">
+                    <span class="glyphicon glyphicon-star-empty"></span> Make Sharezone Admin
+                </a>
+                <!-- Make Sharezone Admin Modal -->
+                <div class="modal fade" id="makeSharezoneAdmin{{ profile.user.id}}" tabindex="-1" role="dialog" aria-labelledby="makeSharezoneAdmin{{ profile.user.id}}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="makeSharezoneAdmin{{ profile.user.id}}">Promote {{ profile.user }}?</h4>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to promote {{ profile.user }} to Sharezone admin?
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-danger" href="{% url 'toolshare:make_sharezone_admin' profile.user.id %}">
+                                    Promote {{ profile.user }}</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+            {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'toolshare:admin_edit_user' profile.user.id %}" class="btn btn-sm btn-block btn-danger">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                </a>
+            </td>   
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+
+{% if request.user.is_superuser %}
+
+<div class="panel panel-primary">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <h2>Sharezones</h2>
+    </div>
+    <!-- Table -->
+    <table class="table table-hover table-striped table-bordered">
+        <tr>
+            <th>Sharezone</th>
+            <th>Approved</th>
+            <th>Edit Sharezone</th>
+        </tr>
+    {% for sharezone in sharezones %}
+        <tr>
+            <td>
+                <a href="{% url 'toolshare:sharezone' sharezone.id %}">{{sharezone}}</a>
+            </td>
+            <td>
+            {% if sharezone.is_approved %}
+                <span class="text-success glyphicon glyphicon-ok"></span>
+            {% else %}
+                <a href="{% url 'toolshare:approve_sharezone' sharezone.id %}" class="btn btn-sm btn-block btn-success">
+                    Approve
+                </a>
+            {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'toolshare:admin_edit_sharezone' sharezone.id %}" class="btn btn-sm btn-block btn-danger">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                </a>
+            </td>     
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endif %}
+
+{% endblock content %}
