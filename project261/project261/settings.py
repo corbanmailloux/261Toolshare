@@ -201,8 +201,9 @@ LOGIN_REDIRECT_URL = 'toolshare:user_profile_mine'
 
 LOGIN_URL = 'login'
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'toolshare@corb.co'
-EMAIL_HOST_PASSWORD = 'BreakfastClub4Life'
+# The following information has been removed. Also, the account has been suspended.
+EMAIL_HOST = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
