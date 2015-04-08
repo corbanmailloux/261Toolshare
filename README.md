@@ -16,7 +16,7 @@ Open your web browser (Google Chrome recommended) to the URL [http://localhost/]
 NOTE:
 If you use want to use the command line to run the django test server instead of a batch file, then navigate to the 'project261' folder and run: 
 
-```bash
+```
 python manage.py runserver 80 --insecure
 ```
 
@@ -26,7 +26,7 @@ A fairly empty test database is located at `/Test DB/django.db`.
 
 To run unit tests navigate to `/project261` and in command line run: 
 
-```bash
+```
 python manage.py test toolshare
 ```
 
