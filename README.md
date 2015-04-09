@@ -15,6 +15,7 @@ This project was made for a class and should not be trusted as a real system.
 ##Installation
 In order to run ToolShare you must have Python 3 with Django 1.5 (For help installing Django, visit the [Django Docs](https://docs.djangoproject.com/en/1.5/intro/install/)). Please run the `runserver.bat` file in order to launch the server. 
 Open your web browser (Google Chrome recommended) to the URL [http://localhost/](http://localhost/). 
+To kill the server, press <kbd>Ctrl</kbd>+<kbd>Break</kbd>.
 
 NOTE:
 If you use want to use the command line to run the django test server instead of a batch file, then navigate to the 'project261' folder and run: 
