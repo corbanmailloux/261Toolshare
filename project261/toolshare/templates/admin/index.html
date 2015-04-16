@@ -155,7 +155,7 @@ The template for the admin page.
             <td>
             {% if profile.is_sharezone_admin %}
                 <a class="btn btn-warning btn-sm btn-block" data-toggle="modal" href="#removeSharezoneAdmin{{ profile.user.id}}">
-                    <span class="glyphicon glyphicon-user"></span> Remove Sharezone Admin
+                    <span class="glyphicon glyphicon-user"></span> Demote
                 </a>
                 <!-- Remove Sharezone Admin Modal -->
                 <div class="modal fade" id="removeSharezoneAdmin{{ profile.user.id}}" tabindex="-1" role="dialog" aria-labelledby="removeSharezoneAdmin{{ profile.user.id}}" aria-hidden="true">
@@ -178,7 +178,7 @@ The template for the admin page.
                 </div><!-- /.modal -->
             {% else %}
                 <a class="btn btn-danger btn-sm btn-block" data-toggle="modal" href="#makeSharezoneAdmin{{ profile.user.id}}">
-                    <span class="glyphicon glyphicon-star-empty"></span> Make Sharezone Admin
+                    <span class="glyphicon glyphicon-star-empty"></span> Promote
                 </a>
                 <!-- Make Sharezone Admin Modal -->
                 <div class="modal fade" id="makeSharezoneAdmin{{ profile.user.id}}" tabindex="-1" role="dialog" aria-labelledby="makeSharezoneAdmin{{ profile.user.id}}" aria-hidden="true">
