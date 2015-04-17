@@ -19,7 +19,7 @@ The template for the User Profile Edit page.
     <h1>Edit Profile</h1>
 </div>
 
-<form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
     {% csrf_token %}
     <table class="bootstrap-table">
     {% for field in forms.0 %}
@@ -54,10 +54,24 @@ The template for the User Profile Edit page.
             </tr>
         </div>
     {% endfor %}
-        <tr><td /><td class="text-info">If you change your Sharezone, any tools left in the sharezone will be forfeited.</td></tr>
-        <tr><td /><td class="text-info">You also will have to wait until an administrator approves the transfer.</td></tr>
+        <tr>
+            <td></td>
+            <td class="text-info">
+                If you change your Sharezone, any tools left in the sharezone will be forfeited.
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="text-info">
+                You also will have to wait until an administrator approves the transfer.
+            </td>
+        </tr>
 
-        <tr><td colspan="3"><h4>Address Information</h4></td></tr>
+        <tr>
+            <td colspan="3">
+                <h4>Address Information</h4>
+            </td>
+        </tr>
     {% for field in forms.2 %}
         <div class="form-group">
             <tr>

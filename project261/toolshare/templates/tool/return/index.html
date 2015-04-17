@@ -24,7 +24,7 @@ The template for the Changing Tool Info Page.
     Please be aware that a rating of "Broken" will remove the tool from the system until the tool's owner can repair and reactivate the tool in the Toolshare system.
 </p>
 
-  <form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
     {% csrf_token %}
     <table>
     {% for field in form %}
@@ -35,5 +35,5 @@ The template for the Changing Tool Info Page.
     {% endfor %}
     </table>
     <input class="btn btn-sm btn-primary" type="submit" value="Submit Changes" />
-  </form>
+</form>
 {% endblock content %}

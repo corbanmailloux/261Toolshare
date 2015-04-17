@@ -19,7 +19,7 @@ The template for the registration page.
     <h1>Create an Account</h1>
 </div>
 
-  <form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
     {% csrf_token %}
     <table class="bootstrap-table">
     {% for field in forms.0 %}
@@ -51,9 +51,13 @@ The template for the registration page.
     {% endfor %}
     {% endif %}
 
-    <tr><td><br></td></tr>
-    <tr><td class="col-left"><h4>Address Information</h4></td></tr>
-    {% for field in forms.2 %}
+        <tr><td><br></td></tr>
+        <tr>
+            <td class="col-left">
+                <h4>Address Information</h4>
+            </td>
+        </tr>
+        {% for field in forms.2 %}
         <tr>
         {% if field.is_hidden %}
             {{ field }}
@@ -65,9 +69,13 @@ The template for the registration page.
             </td>
         {% endif %}
         </tr>
-    {% endfor %}
-    
-    <tr><td class="col-left"><input class="btn btn-block btn-primary" type="submit" value="Create account" /></td></tr>
+        {% endfor %}
+        
+        <tr>
+            <td class="col-left">
+                <input class="btn btn-block btn-primary" type="submit" value="Create account" />
+            </td>
+        </tr>
     </table>
-  </form>
+</form>
 {% endblock content %}

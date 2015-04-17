@@ -23,7 +23,7 @@ The template for the Changing Tool Info Page.
     Please note: A quality of "Broken" will disable sharing for this tool.
 </p>
 
-<form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
     {% csrf_token %}
     <table class="bootstrap-table">
         {% for field in form %}
@@ -46,7 +46,11 @@ The template for the Changing Tool Info Page.
             </tr>
         {% endfor %}
     
-        <tr><td><input class="btn btn-sm btn-primary" type="submit" value="Submit Changes" /></td></tr>
+        <tr>
+            <td>
+                <input class="btn btn-sm btn-primary" type="submit" value="Submit Changes" />
+            </td>
+        </tr>
     </table>
 </form>
 {% endblock content %}

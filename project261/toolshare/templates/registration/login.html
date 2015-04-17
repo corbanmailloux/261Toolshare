@@ -19,7 +19,6 @@ The template for the login page.
     <h1>Login</h1>
 </div>
 
-
 {% if form.non_field_errors %}
 <div class="alert alert-warning alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -67,7 +66,5 @@ The template for the login page.
         <a class="btn btn-default btn-lg btn-block" href="{% url 'password_reset' %}">Forgot your password?</a>
     </div>
 </div>
-
-
 
 {% endblock %}

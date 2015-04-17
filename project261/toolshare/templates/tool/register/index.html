@@ -23,7 +23,7 @@ The template for the Tool Registration Page.
     Please note: A quality of "Broken" will disable sharing for this tool.
 </p>
 
-<form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
 {% csrf_token %}
     <table class="bootstrap-table">
     {% for form in forms %}
@@ -41,11 +41,14 @@ The template for the Tool Registration Page.
         {% endfor %}
     {% endfor %}
 
-    <tr><td class="col-left"><button class="btn btn-block btn-primary" type="submit">
-        <span class="glyphicon glyphicon-wrench"></span>
-        Register Tool
-    </button>
-    </td></tr>
+        <tr>
+            <td class="col-left">
+                <button class="btn btn-block btn-primary" type="submit">
+                    <span class="glyphicon glyphicon-wrench"></span>
+                    Register Tool
+                </button>
+            </td>
+        </tr>
     </table>
 </form>
 {% endblock content %}

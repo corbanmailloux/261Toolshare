@@ -19,7 +19,7 @@ The template for the admin to change sharezone info and approve sharezones
     <h1>Edit Sharezone: {{sharezone}}</h1>
 </div>
 
-<form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
     {% csrf_token %}
 
     <h2>Sharezone Info:</h2>

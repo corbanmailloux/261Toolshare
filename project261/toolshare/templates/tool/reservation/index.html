@@ -28,7 +28,7 @@ The template for the Tool Reservation Page
 <p>Format for reservation: 12/31/2013 10:15 PM</p>
 
 
-<form role="form" action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
 {% csrf_token %}
     <table class="bootstrap-table">
     {% for form in forms %}
@@ -46,7 +46,11 @@ The template for the Tool Reservation Page
         </tr>
     {% endfor %}
     {% endfor %}
-    <tr><td class="col-left"><input class="btn btn-block btn-primary" type="submit" value="Create Reservation" /></td></tr>
+        <tr>
+            <td class="col-left">
+                <input class="btn btn-block btn-primary" type="submit" value="Create Reservation" />
+            </td>
+        </tr>
     </table>
     
 </form>

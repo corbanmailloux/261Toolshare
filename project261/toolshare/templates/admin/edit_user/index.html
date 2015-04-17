@@ -19,7 +19,7 @@ The template for the admin to edit users.
     <h1>Edit User: {{user_editing}}</h1>
 </div>
 
-<form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
     {% csrf_token %}
 
     <h2>Admin-only Info</h2>
@@ -47,7 +47,7 @@ The template for the admin to edit users.
     </table>
     <h2>Profile Info</h2>
     <table class="bootstrap-table">
-        {% for field in forms.2 %}
+    {% for field in forms.2 %}
         <tr>
         {% if field.is_hidden %}
             {{ field }}
@@ -88,11 +88,10 @@ The template for the admin to edit users.
         {% endif %}
         </tr>
     {% endfor %}
-    <tr>
-        <td class="col-left"><input class="btn btn-block btn-primary" type="submit" value="Submit Changes" /></td>
-    </tr>
-</table>
-
+        <tr>
+            <td class="col-left"><input class="btn btn-block btn-primary" type="submit" value="Submit Changes" /></td>
+        </tr>
+    </table>
 </form>
 
 {% endblock content %}

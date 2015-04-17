@@ -19,44 +19,53 @@ The template for the Sharezone registration page.
     <h1>Edit Sharezone</h1>
 </div>
 
-    <form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
     {% csrf_token %}
-        <table class="bootstrap-table">
-        {% for field in forms.0 %}
-            <tr>
-            {% if field.is_hidden %}
+    <table class="bootstrap-table">
+    {% for field in forms.0 %}
+        <tr>
+        {% if field.is_hidden %}
+            {{ field }}
+        {% else %}
+            <td class="col-left">{{ field.label_tag }}:</td>
+            <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">
                 {{ field }}
-            {% else %}
-                <td class="col-left">{{ field.label_tag }}:</td>
-                <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">
-                    {{ field }}
-                    <div class="text-danger">{{ field.errors.0 }}</div>
-                </td>
-                <td class="text-danger">{{ field.errors.0 }}</td>
-            {% endif %}
-            </tr>
-        {% endfor %}
+                <div class="text-danger">{{ field.errors.0 }}</div>
+            </td>
+            <td class="text-danger">{{ field.errors.0 }}</td>
+        {% endif %}
+        </tr>
+    {% endfor %}
         <tr><td><br></td></tr>
-        <tr><td /><td><h4>Sharezone Address Information</h4></td></tr>
-        {% for field in forms.1 %}
-            <tr>
-            {% if field.is_hidden %}
+        <tr>
+            <td></td>
+            <td>
+                <h4>Sharezone Address Information</h4>
+            </td>
+        </tr>
+    {% for field in forms.1 %}
+        <tr>
+        {% if field.is_hidden %}
+            {{ field }}
+        {% else %}
+            <td class="col-left">{{ field.label_tag }}:</td>
+            <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">
                 {{ field }}
-            {% else %}
-                <td class="col-left">{{ field.label_tag }}:</td>
-                <td class="col-right entry {% if field.errors.0 %}entry-error{% endif %}">
-                    {{ field }}
-                    <div class="text-danger">{{ field.errors.0 }}</div>
-                </td>
-                <td class="text-danger">{{ field.errors.0 }}</td>
-            {% endif %}
-            </tr>
-        {% endfor %}
-        
-        <tr><td class="col-left"><button class="btn btn-primary" type="submit">
-            <span class="glyphicon glyphicon-floppy-disk"></span>
-            Submit Changes
-        </button></td></tr>
-        </table>
-    </form>
+                <div class="text-danger">{{ field.errors.0 }}</div>
+            </td>
+            <td class="text-danger">{{ field.errors.0 }}</td>
+        {% endif %}
+        </tr>
+    {% endfor %}
+    
+        <tr>
+            <td class="col-left">
+                <button class="btn btn-primary" type="submit">
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                    Submit Changes
+                </button>
+            </td>
+        </tr>
+    </table>
+</form>
 {% endblock content %}

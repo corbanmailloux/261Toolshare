@@ -19,7 +19,7 @@ The template for the Sharezone registration page.
     <h1>Create a Sharezone</h1>
 </div>
 
-  <form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
     {% csrf_token %}
     <table class="bootstrap-table">
     {% for field in forms.0 %}
@@ -35,8 +35,12 @@ The template for the Sharezone registration page.
         {% endif %}
         </tr>
     {% endfor %}
-    <tr><td><br></td></tr>
-    <tr><td class="col-left"><h4>Sharezone Address</h4></td></tr>
+        <tr><td><br></td></tr>
+        <tr>
+            <td class="col-left">
+                <h4>Sharezone Address</h4>
+            </td>
+        </tr>
     {% for field in forms.1 %}
         <tr>
         {% if field.is_hidden %}
@@ -51,7 +55,11 @@ The template for the Sharezone registration page.
         </tr>
     {% endfor %}
     
-    <tr><td class="col-left"><input class="btn btn-block btn-primary" type="submit" value="Create Sharezone" /></td></tr>
+        <tr>
+            <td class="col-left">
+                <input class="btn btn-block btn-primary" type="submit" value="Create Sharezone" />
+            </td>
+        </tr>
     </table>
-  </form>
+</form>
 {% endblock content %}

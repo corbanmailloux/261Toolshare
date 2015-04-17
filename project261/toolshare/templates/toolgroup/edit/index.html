@@ -18,7 +18,8 @@ The template for the Edit ToolGroup page.
 <div class="page-header">
     <h1>Edit a ToolGroup</h1>
 </div>
-<form action="./"  method="post" ='./'{% if form.is_multipart %} enctype='multipart/form-data'{% endif %}>
+
+<form method="post" {% if form.is_multipart %}enctype='multipart/form-data'{% endif %}>
 {% csrf_token %}
     <div class="form-group">
     	<table class="bootstrap-table">
